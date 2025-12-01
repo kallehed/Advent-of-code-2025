@@ -1,0 +1,13 @@
+
+A := 50;
+C := 0;
+while (a := input(); a) (
+  neg := if (a[0] == "R") 1 else -1;
+  num := a[1:-1] then int;
+  for (_ <- 0 til num) (
+    A += neg;
+    A %%= 100;
+    if (A==0) C += 1;
+  );
+);
+print! "results p1:", C;
