@@ -1,0 +1,19 @@
+
+l := input();
+
+ranges := l split ",";
+coun := 0;
+for (rang <- ranges) (
+  #print(rang);
+  a, b := rang.trim split "-" map int;
+  for (c <- a to b) (
+    c_str := c.str;
+    if (c_str[0:len(c_str)//2] == c_str[len(c_str)//2:]) (
+      offender :=  c;
+      coun += offender;
+    );
+    #print(c);
+  );
+);
+print! "result:", coun
+# too low 1217393

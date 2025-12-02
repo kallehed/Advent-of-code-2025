@@ -1,0 +1,18 @@
+
+l := input();
+
+ranges := l split ",";
+coun := 0;
+for (rang <- ranges) (
+  a, b := rang.trim split "-" map int;
+  for (c <- a to b) (
+    c_str := c.str;
+    if (1 to c_str.len//2 any 
+        \i -> c_str.len % i == 0 and 0 til c_str.len//i all 
+            \j -> c_str[0:i] == c_str[i*j:i*(j+1)]) 
+      coun += c;
+  );
+);
+print! "result:", coun
+# too low 1217393
+

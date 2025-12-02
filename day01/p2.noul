@@ -10,4 +10,4 @@ while (a := input(); a) (
     if (A==0) C += 1;
   );
 );
-print! "results p1:", C;
+"results p1:" print C;
