@@ -1,0 +1,19 @@
+
+total := 0;
+for (line <- read() split "\n") (
+  le := line.len;
+  if (le == 0) break;
+  li := line map int;
+  idxs := 0 til 12 map id;
+  for (i <- 0 til 12) (
+    start_idx := if (i==0) 0 else idxs[i-1]+1;
+    partial := li[start_idx:li.len - 11 + i ];
+    ma := partial fold max;
+    good_idx := partial.enumerate filter (\[_,n] -> n == ma) then first then first;
+    idxs[i] = good_idx + start_idx;
+  );
+  got := idxs map (li index) then enumerate map (\[i,n] -> n * 10^(11-i)) then sum;
+  print(got, idxs);
+  total += got;
+);
+print("RESULT:",total);

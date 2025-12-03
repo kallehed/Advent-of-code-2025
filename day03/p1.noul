@@ -1,0 +1,15 @@
+
+total := 0;
+for (line <- read() split "\n") (
+  le := line.len;
+  best := 0;
+  for (i <- 0 til (le-1)) (
+    for (j <- i+1 til le) (
+      t := line[i] $ line[j];
+      num := t.int;
+      best max= num;
+    );
+  );
+  total += best;
+);
+print(total);
