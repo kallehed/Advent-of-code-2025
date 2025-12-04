@@ -1,0 +1,28 @@
+m := [];
+for (line <- read().trim split "\n") (
+  new := [];
+  for (c <- line) (
+    if (c == '@') new append= true
+    else (new append= false;);
+  );
+  m append= new;
+);
+
+fi := m.len;
+se := m[0].len;
+
+ind := \[i,j] -> if (i < 0 or j < 0 or i >= fi or j >= se) 0 else m[i][j];
+total := 0;
+while (true) (
+  found := [];
+  for (i <- 0 til fi; j <- 0 til se) (
+    if (m[i][j]) (
+      surr := [[i-1,j-1],[i-1,j],[i-1,j+1],[i,j+1],[i+1,j+1],[i+1,j],[i+1,j-1],[i,j-1]];
+      coun := surr map ind then sum;
+      if (coun < 4) (total += 1; found append= [i,j]);
+    ) 
+  );
+  if (found.len == 0) break;
+  for ([i,j] <- found) m[i][j] = false;
+);
+print("Total:", total);
