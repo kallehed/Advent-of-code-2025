@@ -1,0 +1,22 @@
+
+[the_ranges, candidates] := read() split '\n\n';
+ranges := [];
+for (r <- the_ranges split "\n") (
+  [a,b] := r.trim split "-" then (map int);
+  ranges +.= [a,b];
+);
+# sort by lowest 'a' so when we find overlapping sets we can merge the second one to the first instead of the opposite
+ranges sort_on= first;
+
+i := 0;
+while (i < ranges.len - 1) (
+  [a,b] := ranges[i];
+  [aa,bb] := ranges[i+1];
+  if (aa <= b) ( # overlap
+    ranges[i][1] = b max bb; # pick new max
+    remove ranges[i+1];
+  ) 
+  else i += 1; # leave this one behind, nothing else will overlap this, because they are sorted
+);
+total := ranges map (\[a,b] -> b-a+1) then sum;
+print(total);

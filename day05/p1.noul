@@ -1,0 +1,18 @@
+
+[the_ranges, candidates] := read() split '\n\n';
+ranges := [];
+for (r <- the_ranges split "\n") (
+  [a,b] := r.trim split "-" then (map int);
+  ranges +.= [a,b];
+);
+
+total := 0;
+for (c <- candidates.trim split "\n") (
+  cint := c.int;
+  for ([a,b] <- ranges) 
+    if (cint >= a and cint <= b) (
+      total += 1;
+      break;
+    );
+);
+print(total);
