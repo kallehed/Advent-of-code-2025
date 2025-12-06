@@ -1,0 +1,30 @@
+
+lns := read().lines;
+new_cols := lns.last map (!=" ");
+num_lines := lns.butlast;
+rows := num_lines.len;
+data := [];
+for (i <- 0 til num_lines[0].len) (
+  if (new_cols[i]) data +.= [];
+  data[-1] +.= 0;
+  found := false;
+  for (j <- 0 til num_lines.len) (
+    a := num_lines[j][i];
+    if (a==" ") (
+      if (not found) continue;
+      data[-1][-1] //= 10^(num_lines.len -j);
+      break;
+    );
+    found = true;
+    data[-1][-1] += a.int*10^(num_lines.len - j - 1)
+  );
+  if (data[-1][-1] == 0) remove data[-1][-1];
+);
+
+
+print(data);
+op_results := lns.last split " " filter id then enumerate map (\[idx,o] -> data[idx] fold (if (o=="+") + else *));
+
+print(op_results);
+total := op_results.sum;
+print("total:", total);

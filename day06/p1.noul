@@ -1,0 +1,5 @@
+
+lns := read().trim.lines;
+matrix := lns.butlast map (_ split " " filter id map int) then transpose;
+total := lns.last split " " filter id map (\o->if(o=="+")+else*) zip matrix map fold.flip.apply then sum;
+print("total:", total);
