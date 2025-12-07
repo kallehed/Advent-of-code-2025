@@ -1,0 +1,5 @@
+lns := read() then lines;
+total_paths := memoize \i,j -> 
+  try if (lns[i+1][j]=="^") 1 + total_paths(i+1,j-1) + total_paths(i+1,j+1) else total_paths(i+1,j) 
+  catch e -> 0;
+print(1 + total_paths(0, lns[0] locate "S"));
