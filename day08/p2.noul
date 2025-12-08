@@ -1,0 +1,12 @@
+points := read().lines map (_ split "," map int);
+dist := \[x0,x1,x2],[y0,y1,y2] -> ((x0-y0)^2+(x1-y1)^2+(x2-y2)^2).sqrt;
+
+ordered := points combinations 2 map (\[p,q] -> [p, q, p dist q]) sort_on third map (take 2);
+together_sets := points map [_];
+
+for (o <- ordered) (
+  a, b := o map \d -> together_sets locate (d in);
+  if (a!=b) together_sets[a min b] ++= remove together_sets[a max b];
+  if (together_sets.len == 1)
+    (print("res:", o[0][0]*o[1][0]); break)
+);
