@@ -1,0 +1,45 @@
+points := read().lines map (_ split ',' map int);
+# NOT A GENERAL SOLUTION! But works for mine. You need to analyze your input file and find two outlier points.
+# more in comments below...
+
+combs := points combinations 2;
+area := \[[x0,y0],[x1,y1]] -> (1+abs(x0-x1))*(1+abs(y0-y1));
+combs = combs sort_on area then reverse;
+# need to find the first one that is allowed, don't look at rest
+
+for (c <- combs) (
+  [[x0,y0],[x1,y1]] := c;
+  max_x := x0 max x1;
+  min_x := x0 min x1;
+  max_y := y0 max y1;
+  min_y := y0 min y1;
+  # I NOTICED, (in the input), this special point, on the below of a circle looking thing.
+  # I got caught, cuz my rectangle gets to big because of this point. THUS, use this point as 
+  # corner, and look only for points below. If this hadn't worked, I would have looked at the second
+  # weird point slightly above this one, and tried to connect it to points above.
+  good := [94727, 50178];
+  if (c[0] == good) (if (c[0][1] > c[1][1]) continue)
+  else if (c[1] == good) (if (c[0][1] < c[1][1]) continue;) 
+  else continue;
+  # look through all points, so they aren't between strictly between us
+  # and someone is NOT_STRICT outside us
+
+  fail := false;
+  arr := [false, false, false, false];
+  for ([px,py] <- points) (
+    # check no points inside 
+    if (px < max_x and px > min_x and py < max_y and py > min_y)
+      (fail=true;break);
+    # check that there are points not-strictly outside in all 4 directions
+    # still, this is not actually enough, if a weird one passes through inbetween but with no points between
+    arr = arr zip [px>=max_x and py>=max_y,px<=min_x and py>=max_y,px>=max_x and py<=min_y,px<=min_x and py<=min_y] map _|_;
+  );
+  if (not fail and arr.all)
+    (print(c.area); break)
+);
+ 
+# I am not really sure how this solve this in the general case. Because, if the numbers were REALLY large
+# you couldn't even do the brute force solution of bucket-coloring the inside of a grid, it would take too much memory
+# so, I thought this would work, but it doesn't, as the walls can wander weirdly around, and it's hard to encode that 
+# so maybe you would have to 'compress' the input in some way, creating a new graph of points, without unnecessary 
+# space. Some kind of contraction mechanism where the topological properties of the graph remain while cutting the fat.
