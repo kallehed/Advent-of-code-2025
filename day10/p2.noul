@@ -1,0 +1,40 @@
+# WARNING: this solution IS TOO SLOW, the problem is too hard. Therefore I used a Integer Linear Programming solution in p2.py instead to solve it
+total_presses := 0;
+for (l <- read().lines) (
+  to_get_str, r2 := l drop 1 split "]";
+  #to_get := to_get_str map (=="#") then enumerate map (\[i,v] -> 2^i * v) then sum;
+  buttons_str, r := r2 split "{";
+  # turn them into bool-vector, that can be added later
+
+  final_joltage := r[:-1] split "," map int;
+  nums := final_joltage.len;
+
+  buttons_idx := buttons_str.trim split " " map \b -> b[1:-1] split "," map int;
+  buttons_idx = buttons_idx sort_on len then reverse; # sort to be greedy
+  buttons_arrays := buttons_idx map \idxs -> (k := [0] ** nums;for(i<-idxs) k[i] = 1; k);
+
+  print(buttons_arrays, "\n\n");
+
+  # create a memoized function, only depending on state vector (joltage levels), and 
+  # which returns nr of presses to get the final_joltage
+
+  upper_bound := 9999999;
+  depth := 0;
+  state_cache := {};
+
+  f :=  \s -> (
+    if (depth >= upper_bound) 9999999
+    else if (s == final_joltage) (print("S",s); print("move upperbound", upper_bound, depth); upper_bound = depth; 0)
+    else if (s in state_cache) (state_cache[s])
+    else if (all (s zip final_joltage map (apply <=))) (
+      depth += 1;
+      v := 1 + (buttons_arrays map (\b -> f (s zip b map (apply +))) then min);
+      state_cache[s] = v;
+      depth -= 1;
+      v
+    ) else 99999999);
+
+  res := [0] ** nums then f;
+  total_presses += res;
+);
+print("TOTAL: ", total_presses);
