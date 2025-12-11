@@ -1,0 +1,4 @@
+g:= for (l <- read().lines; f,s := l split ":") yield f: s.trim split " ";
+f := memoize \a,b,c -> if (a=="out") b&c else g[a] map f(_,b|(a=="dac"),c|(a=="fft")) then sum;
+f("svr", 0,0)
+

@@ -1,0 +1,3 @@
+graph := for (l <- read().lines; f,s := l split ":") yield f: s.trim split " ";
+f := \a -> if (a=="out") 1 else graph[a] map f then sum;
+"you".f
