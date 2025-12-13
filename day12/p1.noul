@@ -1,0 +1,1 @@
+read().lines filter ("x" ∈) map (split ":") >>> map (trim) >>> (split "x")***(split " ") >>> map (map int) >>> *(..._)***(_.sum*9) >>> >=(..._) then sum
